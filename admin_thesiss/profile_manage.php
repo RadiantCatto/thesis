@@ -26,8 +26,7 @@ include('security.php');
             </div>
             <div class="form-group">
                 <label>Card ID</label>
-                <button type="button" class="btn btn-primary" onclick="readRFIDCard()">Tap RFID Card</button>
-                <input type="hidden" name="cardID" id="cardID" class="form-control" readonly>
+                <input type="text" id="cardID" name="cardID" class="form-control" placeholder="Tap UID Card">
             </div>
             <div class="form-group">
                 <label>Points Earned</label>
@@ -43,6 +42,13 @@ include('security.php');
   </div>
 </div>
 
+<script>
+    // Function to capture cardID when tapped
+    document.getElementById('cardID').addEventListener('blur', function(event) {
+        var cardIDInput = document.getElementById('cardID');
+        cardIDInput.value = event.target.value;
+    });
+</script>
 
 <div class="container-fluid">
     <!-- DataTables -->

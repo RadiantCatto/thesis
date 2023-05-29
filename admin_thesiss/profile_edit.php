@@ -29,10 +29,10 @@ include('security.php');
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" name="edit_email" value="<?php echo $row['email'] ?>" class="form-control" placeholder="Enter Email">
-                        </div>
+                            </div>
                         <div class="form-group">
                             <label>Card ID</label>
-                            <input type="text" name="edit_cardID" value="<?php echo $row['cardID'] ?>" class="form-control" placeholder="Enter Card ID">
+                            <input type="text" name="edit_cardID" value="<?php echo $row['cardID'] ?>" class="form-control" placeholder="Enter Card ID" onclick="readRFIDCard()">
                         </div>
                         <div class="form-group">
                             <label>Points Earned</label>
