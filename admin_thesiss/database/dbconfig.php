@@ -1,4 +1,3 @@
-<link href="..css/sb-admin-2.min.css" rel="stylesheet">
 <?php
 
 $server_name = "localhost";
@@ -6,7 +5,7 @@ $db_username = "root";
 $db_password = "";
 $db_name = "adminpanel";
 
-$connection = mysqli_connect($server_name,$db_username,$db_password,$db_name);
+$connection =new mysqli($server_name, $db_username, $db_password, $db_name);
 
 // Check database connection
 if (!$connection) {
@@ -30,4 +29,4 @@ if (!$connection) {
     exit();
 }
 
-?>
+
