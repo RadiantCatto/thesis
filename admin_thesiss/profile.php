@@ -2,6 +2,9 @@
 include('includes/header.php'); 
 include('includes/navbar.php'); 
 include('security.php');
+    //Database
+include('displayUID.php');
+include('database/database.php');
 ?>
 
 <div class="container-fluid">
@@ -13,40 +16,32 @@ include('security.php');
         </div>
         <div class="card-body">
             <div class="table-responsive">
-
-                <?php
-                $query = "SELECT * FROM user_register";
-                $query_run = mysqli_query($connection, $query);
-                ?>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Username</th>
                             <th>Card ID</th> <!-- New column header for cardID -->
+                            <th>Name</th>
                             <th>Email</th>
                             <th>Points Earned</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if (mysqli_num_rows($query_run) > 0) {
-                            while ($row = mysqli_fetch_assoc($query_run)) {
-                        ?>
-                                <tr>
-                                    <td><?php echo $row['username']; ?></td>
-                                    <td><?php echo $row['cardID']; ?></td> <!-- Display cardID value -->
-                                    <td><?php echo $row['email']; ?></td>
-                                    <td><?php echo $row['earned']; ?></td>
-                                </tr>
-                        <?php
-                            }
-                        } else {
-                            echo "No Record Found";
+                    <?php
+                        $pdo = Database::connect();
+                        $sql = 'SELECT * FROM user_register ORDER BY username ASC';
+                        foreach ($pdo->query($sql) as $row) {
+                            echo '<tr>';
+                            echo '<td>'. $row['cardID'] . '</td>';
+                            echo '<td>'. $row['username'] . '</td>';
+                            echo '<td>'. $row['email'] . '</td>';
+                            echo '<td>'. $row['earned'] . '</td>';
+                            echo '<td>';
+                            echo '</tr>';
                         }
-                        ?>
+                        Database::disconnect();
+                    ?>
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>

@@ -1,7 +1,11 @@
 <?php
 include('includes/header.php'); 
 include('includes/navbar.php'); 
-include('security.php');
+include('database/database.php');
+
+    $Write="<?php $" . "UIDresult=''; " . "echo $" . "UIDresult;" . " ?>";
+    file_put_contents('UIDContainer.php',$Write);
+
 ?>
 
 <div class="modal fade" id="adduserprofile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -16,17 +20,26 @@ include('security.php');
       <form action="code1.php" method="POST">
         <div class="modal-body">
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" placeholder="Enter Username">
+                <label>Name</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter Name">
             </div>
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" name="email" class="form-control checking_email" placeholder="Enter Email">
                 <small class="error_email" style="color: red;"></small>
             </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                            $("#getUID").load("UIDContainer.php");
+                            setInterval(function() {
+                                $("#getUID").load("UIDContainer.php");
+                            }, 500);
+                        });
+                    </script>
             <div class="form-group">
                 <label>Card ID</label>
-                <input type="text" id="cardID" name="cardID" class="form-control" placeholder="Tap UID Card">
+                <textarea name="cardID" id="getUID" placeholder="Please Scan your Card / Key Chain to display ID" rows="1" cols="1" required class="form-control-plaintext"></textarea>
             </div>
             <div class="form-group">
                 <label>Points Earned</label>
@@ -42,13 +55,6 @@ include('security.php');
   </div>
 </div>
 
-<script>
-    // Function to capture cardID when tapped
-    document.getElementById('cardID').addEventListener('blur', function(event) {
-        var cardIDInput = document.getElementById('cardID');
-        cardIDInput.value = event.target.value;
-    });
-</script>
 
 <div class="container-fluid">
     <!-- DataTables -->
@@ -68,9 +74,8 @@ include('security.php');
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Username</th>
                             <th>Card ID</th>
+                            <th>Name</th>
                             <th>Email</th>
                             <th>Points Earned</th>
                             <th>EDIT</th>
@@ -83,20 +88,19 @@ include('security.php');
                             while($row = mysqli_fetch_assoc($query_run)) {
                         ?>
                             <tr>
-                                <td><?php echo $row['user_id']; ?></td>
-                                <td><?php echo $row['username']; ?></td>
                                 <td><?php echo $row['cardID']; ?></td>
+                                <td><?php echo $row['username']; ?></td>
                                 <td><?php echo $row['email']; ?></td>
                                 <td><?php echo $row['earned']; ?></td>
                                 <td>
                                     <form action="profile_edit.php" method="post">
-                                        <input type="hidden" name="user_edit_id" value="<?php echo $row['user_id']; ?>">
+                                        <input type="hidden" name="edit_cardID" value="<?php echo $row['cardID']; ?>">
                                         <button type="submit" name="user_edit_btn" class="btn btn-success">EDIT</button>
                                     </form>
                                 </td>
                                 <td>
                                     <form action="code1.php" method="post">
-                                        <input type="hidden" name="user_delete_id" value="<?php echo $row['user_id']; ?>">
+                                        <input type="hidden" name="delete_cardID" value="<?php echo $row['cardID']; ?>">
                                         <button type="submit" name="user_delete_btn" class="btn btn-danger">DELETE</button>
                                     </form>
                                 </td>

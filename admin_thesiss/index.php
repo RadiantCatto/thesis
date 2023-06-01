@@ -1,6 +1,8 @@
 <?php
 include('includes/header.php'); 
 include('includes/navbar.php'); 
+
+
 ?>
 
 
@@ -54,9 +56,9 @@ include('includes/navbar.php');
 
               
               <?php
-                require 'database/dbconfig.php';
+                require 'database/database.php';
 
-                $query = "SELECT user_id FROM user_register ORDER BY user_id";  
+                $query = "SELECT cardID FROM user_register ORDER BY cardID";  
                 $query_run = mysqli_query($connection, $query);
                 $row = mysqli_num_rows($query_run);
                 echo '<h4> Total User: '.$row.'</h4>';

@@ -13,18 +13,17 @@ include('security.php');
         <div class="card-body">
             <?php
             if (isset($_POST['user_edit_btn'])) {
-                $id = $_POST['user_edit_id'];
+                $cardID= $_POST['edit_cardID'];
 
-                $query = "SELECT * FROM user_register WHERE user_id='$id' ";
+                $query = "SELECT * FROM user_register WHERE cardid='$cardID' ";
                 $query_run = mysqli_query($connection, $query);
 
                 foreach ($query_run as $row) {
                     ?>
                     <form action="code1.php" method="POST">
-                        <input type="hidden" name="user_edit_id" value="<?php echo $row['user_id'] ?>">
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" name="edit_username" value="<?php echo $row['username'] ?>" class="form-control" placeholder="Enter Username">
+                            <label>Name</label>
+                            <input type="text" name="edit_username" value="<?php echo $row['username'] ?>" class="form-control" placeholder="Enter Name">
                         </div>
                         <div class="form-group">
                             <label>Email</label>
@@ -32,7 +31,7 @@ include('security.php');
                             </div>
                         <div class="form-group">
                             <label>Card ID</label>
-                            <input type="text" name="edit_cardID" value="<?php echo $row['cardID'] ?>" class="form-control" placeholder="Enter Card ID" onclick="readRFIDCard()">
+                            <input type="text" name="edit_cardID" value="<?php echo $row['cardID'] ?>" class="form-control" placeholder="Enter Card ID"  readonly>
                         </div>
                         <div class="form-group">
                             <label>Points Earned</label>
