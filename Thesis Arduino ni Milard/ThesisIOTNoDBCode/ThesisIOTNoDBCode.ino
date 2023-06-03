@@ -64,6 +64,15 @@ void loop() {
       mfrc522.PCD_StopCrypto1();
       delay(1000);
       arduinoSerial.write("stop");
+      delay(2000);
+      if (arduinoSerial.available()) {
+        String command = arduinoSerial.readStringUntil('\n');
+        user_points = command.toInt();
+        Serial.print("Received points: ");
+        Serial.println(user_points);
+        // Process the received points as needed
+      }
+      delay(2000);
       resetFunc(); // Call reset
     } else {
       // Sign in User and send signal to Arduino to start executing its code
@@ -86,6 +95,15 @@ void loop() {
           mfrc522.PCD_StopCrypto1();
           delay(1000);
           arduinoSerial.write("stop");
+          delay(2000);
+          if (arduinoSerial.available()) {
+            String command = arduinoSerial.readStringUntil('\n');
+            user_points = command.toInt();
+            Serial.print("Received points: ");
+            Serial.println(user_points);
+            // Process the received points as needed
+          }
+          delay(2000);
           resetFunc(); // Call reset
         }
         else if (arduinoSerial.available()) {

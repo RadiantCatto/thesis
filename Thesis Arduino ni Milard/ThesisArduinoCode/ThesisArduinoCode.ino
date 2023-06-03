@@ -7,7 +7,8 @@
 #define CONFIRM_BUTTON 6
 const int HX711_DOUT_PIN = 4;    // DOUT pin
 const int HX711_SCK_PIN = 5;     // SCK pin
-const int inductivePin = 9; // Connect output pin of the sensor to digital pin 9
+const int inductivePin = 10; // Connect output pin of the sensor to digital pin 9
+void(* resetFunc) (void) = 0;     // Declare reset function at address 0
 SoftwareSerial espSerial(2, 3);  //RX, TX
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address and dimensions
 
@@ -24,12 +25,14 @@ byte confirmState = digitalRead(CONFIRM_BUTTON);
 void setup() { 
   Serial.begin(9600); // Initialize serial communication at 9600 baud
   espSerial.begin(9600);
-  servodispenser.attach(7); // Change D1 to the digital pin that you connected the Orange (SIGNAL) wire to D7 & D8
-  servolid.attach(8); // Change D1 to the digital pin that you connected the Orange (SIGNAL) wire to D7 & D8
+  servolid.attach(8); // Connected the Orange (SIGNAL) wire to D8
+  servodispenser.attach(9); // Connected the Orange (SIGNAL) wire to D9
   pinMode(inductivePin, INPUT); // Set trig pin as output
   servolid.write(100); // Rotate servo to 90 degrees
+  servodispenser.write(100); // Rotate servo to 90 degrees
   delay(2000); // Wait 3 seconds
   servolid.write(0); // Rotate servo back to original position
+  servodispenser.write(0); // Rotate servo to 90 degrees
   delay(2000); // Wait 3 seconds
   lcd.begin(16, 2); // Initialize LCD
   lcd.setBacklight(HIGH); // Initialize backlight
@@ -55,6 +58,11 @@ void loop() {
   } else if (command == "stop") {
     Serial.println("Terminating Code.");
     executeCode = false;
+    Serial.print("Sending points: ");
+    Serial.println(user_points);
+    String user_pointsString = String(user_points);
+    espSerial.write(user_pointsString.c_str());
+    resetFunc(); // Call reset
   } else {
     user_points = command.toInt();
     Serial.print("Received points: ");
@@ -69,7 +77,7 @@ void loop() {
   int IR65 = analogRead(A2);
   int IR35 = analogRead(A3);
   int wasteweight = 150; //placeholder for weight
-
+  static bool buttonPressed = false;  // Variable to track button press state
   if (inductiveValue == HIGH) { // If the inductive sensor detects metal, servo motor won't open lid
       lcd.clear();
       lcd.setCursor(0, 0);
@@ -86,7 +94,7 @@ void loop() {
       lcd.print("Welcome!");
       lcd.setCursor(0, 1);
       lcd.print("Deposit a bottle");
-      delay(3000);
+      delay(1000);
       if (IR35 < 500 && IR65 < 500 && IR100 < 500){
         lcd.clear();
         lcd.setCursor(0, 0);
@@ -97,10 +105,6 @@ void loop() {
         lcd.print("Emptying");
         lcd.setCursor(0, 1);
         lcd.print("Scheduled");
-        Serial.print("Sending points: ");
-        Serial.println(user_points);
-        String user_pointsString = String(user_points);
-        espSerial.write(user_pointsString.c_str());  
         }
       else if (IR35 < 500 && IR65 < 500){
         lcd.clear();
@@ -149,33 +153,7 @@ void loop() {
         delay(2000); // Wait 3 seconds
         servolid.write(0); // Rotate servo back to original position
         delay(2000); // Wait 3 seconds
-        }      
-      /*else if (confirmState == LOW && !buttonPressed) {
-        dfamount = user_points / dfpoints;
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("You can redeem ");
-        lcd.print(dfamount);
-        lcd.setCursor(0, 1);
-        lcd.print("dog food");
-        buttonPressed = true;  // Set buttonPressed to true to indicate button is pressed
-        delay(3000);
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Press again to");
-        lcd.setCursor(0, 1);
-        lcd.print("redeem dogfood!");
-        delay(3000);
-        } 
-      else if (confirmState == LOW && buttonPressed) {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("Redeeming");
-        lcd.setCursor(0, 1);
-        lcd.print("dogfood!");
-        buttonPressed = false;  // Set buttonPressed to false to indicate button press is processed
-        delay(3000);
-        }*/    
+        }    
       }
     else if(wasteweight > 200){
       lcd.clear();
@@ -191,6 +169,32 @@ void loop() {
       lcd.print("Plastic Bottles!");
       delay(3000);  
       }     
+    }    
+    else if (confirmState == LOW && !buttonPressed) {
+      dfamount = user_points / dfpoints;
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("You can redeem ");
+      lcd.print(dfamount);
+      lcd.setCursor(0, 1);
+      lcd.print("dog food");
+      buttonPressed = true;  // Set buttonPressed to true to indicate button is pressed
+      delay(3000);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Press again to");
+      lcd.setCursor(0, 1);
+      lcd.print("redeem dogfood!");
+      delay(3000);
+      } 
+    else if (confirmState == LOW && buttonPressed) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Redeeming");
+      lcd.setCursor(0, 1);
+      lcd.print("dogfood!");
+      buttonPressed = false;  // Set buttonPressed to false to indicate button press is processed
+      delay(3000);
     }
   }
 }
