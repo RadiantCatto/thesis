@@ -80,19 +80,21 @@
             <div class="topbar-divider d-none d-sm-block"></div>
             <!-- Nav Item - User Information -->
             <?php
-            $query = "SELECT * FROM register WHERE email = '" . $_SESSION['username'] . "'";
-            $query_run = mysqli_query($connection, $query);
-
-            if (mysqli_num_rows($query_run) > 0) {
-              while ($row = mysqli_fetch_assoc($query_run)) {
-            ?>
+                $query = "SELECT * FROM register";
+                $query_run = mysqli_query($connection, $query);
+                ?>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-
-                  <?php echo $row['email'] ; ?>
+                <?php
+                        if(mysqli_num_rows($query_run) > 0)        
+                        {
+                            while($row = mysqli_fetch_assoc($query_run))
+                            {
+                        ?>
+                  <?php echo $row['username'] ; ?>
                 </span>
-                <img class="img-profile rounded-circle" src="img/icons8-admin-48.png">
+                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <?php
                             } 
