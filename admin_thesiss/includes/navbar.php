@@ -34,11 +34,12 @@
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
     <i class="fa fa-users"></i>
-    <span>User Profile</span>
+    <span>Users </span>
   </a>
   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Components:</h6>
+      <a class="collapse-item" href="user_index.php">User Portal</a>
       <a class="collapse-item" href="profile.php">User Details</a>
       <a class="collapse-item" href="profile_manage.php">Account Management</a>
     </div>
@@ -83,6 +84,7 @@
                 $query = "SELECT * FROM register";
                 $query_run = mysqli_query($connection, $query);
                 ?>
+
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
@@ -94,7 +96,7 @@
                         ?>
                   <?php echo $row['username'] ; ?>
                 </span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile rounded-circle" src="img/icons8-admin-48.png">
               </a>
               <?php
                             } 

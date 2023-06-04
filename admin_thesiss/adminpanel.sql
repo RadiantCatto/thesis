@@ -6,11 +6,20 @@ CREATE TABLE register (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE user_register (
-  user_id INT(11) NOT NULL AUTO_INCREMENT,
-  username VARCHAR(50) NOT NULL,
-  earned DECIMAL(10,2) DEFAULT 0.00,
-  cardID VARCHAR(20) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  PRIMARY KEY (user_id)
+CREATE TABLE IF NOT EXISTS `user_register` (
+  `username` varchar(40) NOT NULL,
+  `cardID` varchar(40) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `earned` DECIMAL(10,2) DEFAULT 0.00,
+  PRIMARY KEY (`cardID`)
+) ;
+
+CREATE TABLE login (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  datetime DATETIME,
+  cardID VARCHAR(40),
+  username VARCHAR(40),
+  email VARCHAR(30),
+  earned DECIMAL(10, 2),
+  status VARCHAR(20)
 );

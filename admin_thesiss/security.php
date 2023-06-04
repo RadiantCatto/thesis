@@ -1,6 +1,6 @@
 <?php
 
-include('database/dbconfig.php');
+include_once 'database/dbconfig.php';
 
 if($connection)
 {

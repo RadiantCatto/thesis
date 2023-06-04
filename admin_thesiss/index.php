@@ -1,6 +1,8 @@
 <?php
 include('includes/header.php'); 
 include('includes/navbar.php'); 
+
+
 ?>
 
 
@@ -25,7 +27,7 @@ include('includes/navbar.php');
               <div class="h5 mb-0 font-weight-bold text-gray-800">
 
                <?php
-                require 'database/dbconfig.php';
+                include_once 'database/dbconfig.php';
 
                 $query = "SELECT id FROM register ORDER BY id";  
                 $query_run = mysqli_query($connection, $query);
@@ -54,9 +56,9 @@ include('includes/navbar.php');
 
               
               <?php
-                require 'database/dbconfig.php';
+                require 'database/database.php';
 
-                $query = "SELECT user_id FROM user_register ORDER BY user_id";  
+                $query = "SELECT cardID FROM user_register ORDER BY cardID";  
                 $query_run = mysqli_query($connection, $query);
                 $row = mysqli_num_rows($query_run);
                 echo '<h4> Total User: '.$row.'</h4>';
@@ -95,23 +97,7 @@ include('includes/navbar.php');
       </div>
     </div>
 
-    <!-- Remaining Balance(Dog Food Sausage) -->
-    <div class="col-xl-3 col-md-6 mb-4">
-      <div class="card border-left-danger shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Remaining Stocks(Dog Food Sausage)</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-            </div>
-            <div class="col-auto">
-              <i class="fas fa-hotdog fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Content Row -->
 

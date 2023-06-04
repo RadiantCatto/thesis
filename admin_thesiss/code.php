@@ -1,6 +1,6 @@
      <?php
     // Import security.php file
-    include('security.php');
+    include_once 'security.php';
 
     // Handle registration form submission
     if(isset($_POST['registerbtn'])) {
@@ -113,6 +113,7 @@
         {
             // Set the username in the session and redirect to the index page
             $_SESSION['username'] = $email_login;
+            echo $_SESSION['username'];
             header('Location: index.php');
         } 
         else

@@ -1,0 +1,30 @@
+<?php
+
+include_once 'database.php';
+
+$conn = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
+
+// Retrieve values from the user_register table for a specific cardID
+$cardID = $_POST['cardID']; // Assuming you have the cardID value available
+$stmt = $conn->prepare("SELECT username, email, earned FROM user_register WHERE cardID = ?");
+$stmt->bind_param('s', $cardID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    // Fetch the values from the result
+    $row = $result->fetch_assoc();
+    $username = $row['username'];
+    $email = $row['email'];
+    $earned = $row['earned'];
+
+    // Insert the values into the login table
+    $insertStmt = $conn->prepare("INSERT INTO login (cardID, username, email, earned) VALUES (?, ?, ?, ?)");
+    $insertStmt->bind_param('sssd', $cardID, $username, $email, $earned);
+    $insertStmt->execute();
+    $insertStmt->close();
+}
+
+$stmt->close();
+$conn->close();
+?>
