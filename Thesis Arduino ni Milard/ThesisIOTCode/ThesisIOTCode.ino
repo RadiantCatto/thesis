@@ -8,8 +8,8 @@
 #define RST_PIN D4
 
 // Declaration of variables and other initializations
-MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance
 SoftwareSerial arduinoSerial(4, 5);  // RX, TX
+MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance
 String userName = "User";          // Set user name
 bool isSignedIn = false;            // Track sign-in status
 void(* resetFunc) (void) = 0;     // Declare reset function at address 0
@@ -17,7 +17,7 @@ void(* resetFunc) (void) = 0;     // Declare reset function at address 0
 const char* ssid = "Redmi Note 9 Pro";
 const char* password = "Milard123";
 
-int user_points = 10; // Initialization of accumulated user points
+int user_points = 0; // Initialization of accumulated user points
 
 // Add WiFiClient object
 WiFiClient client;
@@ -25,8 +25,8 @@ WiFiClient client;
 String cardID = ""; // Declare cardID variable outside the loop
 
 void setup() {
-  Serial.begin(9600);
-  arduinoSerial.begin(9600);
+  Serial.begin(9600);         // Initialize the serial communication for debugging
+  arduinoSerial.begin(9600);  // Initialize the software serial communication with Arduino
   WiFi.begin(ssid, password);
   Serial.println();
   Serial.print("Connecting to ");
@@ -70,15 +70,17 @@ void loop() {
       mfrc522.PCD_StopCrypto1();
       delay(1000);
       arduinoSerial.write("stop");
-      delay(2000);
+      delay(2000);        
       if (arduinoSerial.available()) {
         String command = arduinoSerial.readStringUntil('\n');
         user_points = command.toInt();
         Serial.print("Received points: ");
         Serial.println(user_points);
+        delay(2000);
         // Process the received points as needed
         sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
       }
+      Serial.println("Current points:");
       Serial.println(user_points);
       delay(2000);
       resetFunc(); // Call reset
@@ -87,11 +89,12 @@ void loop() {
       Serial.print(userName);
       Serial.println(" has signed in.");
       Serial.println();
+      Serial.println("Current points:");
       Serial.println(user_points);
       isSignedIn = true;
       arduinoSerial.write("start");
+      delay(2000);        
       sendToDatabase(cardID, user_points);
-      delay(2000);
       String user_pointsString = String(user_points);
       arduinoSerial.write(user_pointsString.c_str());
       while (isSignedIn == true) {
@@ -110,6 +113,7 @@ void loop() {
             user_points = command.toInt();
             Serial.print("Received points: ");
             Serial.println(user_points);
+            delay(2000);
             // Process the received points as needed
             sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
           }
@@ -121,6 +125,7 @@ void loop() {
           user_points = command.toInt();
           Serial.print("Received points: ");
           Serial.println(user_points);
+          delay(2000);
           // Process the received points as needed
           sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
         }
@@ -149,7 +154,6 @@ void sendToDatabase(const String& cardID, int points) {
       Serial.print("HTTP request error: ");
       Serial.println(http.errorToString(httpCode));
     }
-
     http.end();
   }
 }
