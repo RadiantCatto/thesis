@@ -9,7 +9,7 @@ SoftwareSerial espSerial(2, 3);  // RX, TX
 LiquidCrystal_I2C lcd(0x27, 16, 2); // Set the LCD address and dimensions
 
 Servo servolid;
-int user_points = 100;
+int user_points = 0;
 bool executeCode = false; // Flag to control code execution
 
 void setup() { 
@@ -21,7 +21,6 @@ void setup() {
   delay(1000); // Wait 2 seconds
   servolid.write(0); // Rotate servo back to original position
   delay(1000); // Wait 2 seconds
-  /*
   lcd.begin(16, 2); // Initialize LCD
   lcd.setBacklight(HIGH); // Initialize backlight
   lcd.clear(); //Clear lcd screen
@@ -33,7 +32,7 @@ void setup() {
   lcd.setCursor(0, 0);
   lcd.print("Tap your card");
   lcd.setCursor(0, 1);
-  lcd.print("to sign-in!"); */
+  lcd.print("to sign-in!"); 
 }
 
 void loop() {
@@ -50,7 +49,7 @@ void loop() {
       Serial.println(user_points);
       String user_pointsString = String(user_points);
       espSerial.write(user_pointsString.c_str());
-      delay(2000);     
+      delay(5000);     
       resetFunc(); // Call reset
     } 
     else {

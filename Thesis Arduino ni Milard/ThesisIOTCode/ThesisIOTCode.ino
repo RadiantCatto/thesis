@@ -69,20 +69,17 @@ void loop() {
       mfrc522.PICC_HaltA();  // Stop reading
       mfrc522.PCD_StopCrypto1();
       delay(1000);
-      arduinoSerial.write("stop");
-      delay(2000);        
-      if (arduinoSerial.available()) {
-        String command = arduinoSerial.readStringUntil('\n');
-        user_points = command.toInt();
-        Serial.print("Received points: ");
-        Serial.println(user_points);
-        delay(2000);
-        // Process the received points as needed
-        sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
-      }
+      arduinoSerial.write("stop");    
+      delay(2000);
+      String command = arduinoSerial.readStringUntil('\n');
+      user_points = command.toInt();
+      Serial.print("Received points: ");
+      Serial.println(user_points);
+      sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
+      delay(2000);
       Serial.println("Current points:");
       Serial.println(user_points);
-      delay(2000);
+      delay(5000);
       resetFunc(); // Call reset
     } else {
       // Sign in User and send signal to Arduino to start executing its code
@@ -108,27 +105,24 @@ void loop() {
           delay(1000);
           arduinoSerial.write("stop");
           delay(2000);
-          if (arduinoSerial.available()) {
-            String command = arduinoSerial.readStringUntil('\n');
-            user_points = command.toInt();
-            Serial.print("Received points: ");
-            Serial.println(user_points);
-            delay(2000);
-            // Process the received points as needed
-            sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
-          }
-          Serial.println(user_points);
-          delay(2000);
-          resetFunc(); // Call reset
-        } else if (arduinoSerial.available()) {
           String command = arduinoSerial.readStringUntil('\n');
           user_points = command.toInt();
           Serial.print("Received points: ");
           Serial.println(user_points);
-          delay(2000);
-          // Process the received points as needed
           sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
-        }
+          delay(2000);
+          Serial.println("Current points:");
+          Serial.println(user_points);
+          delay(5000);
+          resetFunc(); // Call reset
+        } else if (arduinoSerial.available()) {
+            String command = arduinoSerial.readStringUntil('\n');
+            user_points = command.toInt();
+            Serial.print("Received points: ");
+            Serial.println(user_points);
+            sendToDatabase(cardID, user_points); // Send cardID and user_points to the database
+            delay(2000);
+          }
       }
     }
   }
